@@ -1,21 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import PeoplePage from './src/pages/PeoplePage';
+import PeopleDetailPage from './src/pages/PeopleDetailsPage';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const StackNavigator = createStackNavigator(
+  {
+    Main: {
+      screen: PeoplePage,
+    },
+    PeopleDetail: {
+      screen: PeopleDetailPage,
+      navigationOptions: ({ navigation }) => {
+        const peopleName =
+          navigation.state.params.pessoa.name.title +
+          ' ' +
+          navigation.state.params.pessoa.name.first +
+          ' ' +
+          navigation.state.params.pessoa.name.last;
+        return {
+          title: peopleName,
+          headerTitleStyle: {
+            color: 'white',
+            fontSize: 30,
+            flexGrow: 1,
+          },
+        };
+      },
+    },
   },
-});
+  {
+    defaultNavigationOptions: {
+      title: 'Pessoas!',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#6ca2f7',
+        borderBottomWidth: 1,
+        borderBottomColor: 'c5c5c5',
+      },
+      headerTitleStyle: {
+        color: 'white',
+        fontSize: 30,
+        flexGrow: 1,
+        textAlign: 'center',
+      },
+    },
+  },
+);
+
+const AppContainer = createAppContainer(StackNavigator);
+
+export default AppContainer;
